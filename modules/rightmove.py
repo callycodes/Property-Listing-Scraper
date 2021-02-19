@@ -37,6 +37,7 @@ propertyKeys = {
 def getLetProperty(url):
 
 	page = requests.get(url)
+
 	page_parsed = BeautifulSoup(page.content, 'html.parser')
 	
 	meta_parsed = BeautifulSoup(page.text, 'html.parser')
@@ -89,12 +90,15 @@ def getLetProperty(url):
 	except:
 		print('Problem with letting keys')
 
-	for div in page_parsed.select('#root > div > div.WJG_W7faYk84nW-6sCBVi > main > div._4hBezflLdgDMdFtURKTWh')[0]:
-		for (fKey, cont) in propertyKeys.items():
-			if div.select('div:nth-child(1)')[0].text in cont:
-				print(True)
-				property_details[fKey] = div.select('div:nth-child(2) > div:nth-child(2)')[0].text
-				
+	try:
+		for div in page_parsed.select('#root > div > div.WJG_W7faYk84nW-6sCBVi > main > div._4hBezflLdgDMdFtURKTWh')[0]:
+			for (fKey, cont) in propertyKeys.items():
+				if div.select('div:nth-child(1)')[0].text in cont:
+					print(True)
+					property_details[fKey] = div.select('div:nth-child(2) > div:nth-child(2)')[0].text
+	except:
+		print('Problem with property keys')
+
 	realtor = {
 		'name': page_parsed.select('div.WJG_W7faYk84nW-6sCBVi > aside > div > div > div._2WvNKlXUtQjtXXF3acAyQp > div._1HfIlGN38D_5t6P1dlQ4pW > div._2OyLeBVg-z92a2saGVUNnD > div > div.RPNfwwZBarvBLs58-mdN8 > a')[0].text,
 		'telephone': page_parsed.select('div.WJG_W7faYk84nW-6sCBVi > aside > div > div > div._2WvNKlXUtQjtXXF3acAyQp > div._1HfIlGN38D_5t6P1dlQ4pW > div._2jlFWdXWxYn37izq_CadDw > div > div > a')[0]['href']
@@ -120,6 +124,7 @@ def getLetProperty(url):
 	property_json['photo'] = main_photo
 	property_json['letting_info'] = letting_details
 	property_json['property_info'] = property_details
+	property_json['position'] = position
 	
 	property_json['url'] = url
 	
