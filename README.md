@@ -1,40 +1,47 @@
 
 Hey, thanks for checking out my repo.
 
-What you see here is an EXTREMELY tempermental attempt at me scraping information from the Rightmove website. This script is largely based on using css selectors and element selectors, so every couple of months it may break as Rightmove update their site.
+UPDATED [19/2/2021]: Rightmove actually returns a JSON object in the script tags of the webpage, a simple cleanup now returns a much nicer JSON object.
+
+~~What you see here is an EXTREMELY tempermental attempt at me scraping information from the Rightmove website. This script is largely based on using css selectors and element selectors, so every couple of months it may break as Rightmove update their site.~~
 
 It's pretty simple, but was very tedious. The application uses Flask, so it creates a local server you can query at the following url:
 
-http://localhost:5000/rightmove?url=[rightmoveurlhere]
+`http://localhost:5000/rightmove?url=[rightmoveurlhere]`
 
 The application scrapes and returns the following information in JSON format:
-{
-  "added": "",
-  "address": "",
-  "features": [],
-  "letting_info": { 
-    "deposit": "",
-    "furnish_type": "",
-    "let_available": "",
-    "let_type": "" },
-  "photo": "",
-  "photo_count": ,
-  "price_per_month":"",
-  "price_per_week": "",
-  "property_info": {
-    "bathrooms": "",
-    "bedrooms": "",
-    "property_type": "" },
-  "realtor": {
-    "name": "",
-    "telephone": "" },
-  "stations": [
-    { "distance": "",
-      "name": "",
-      "type": "" }
-  ],
-  "url": ""
-}
+
+`{
+  id = '',
+  info = {
+    'bedrooms': 0,
+    'bathrooms': 0
+  },
+  prices = {
+    'monthly': '',
+    'weekly': ''
+  },
+  location = {
+    'display': '',
+    'latitude': 0,
+    'longitude': 0
+  },
+  letting = {
+    'available': '',
+    'deposit': 0,
+    'type': '',
+    'furnished': ''
+  },
+  features = [],
+  images = [],
+  realtor = {
+    'name': '',
+    'address': '',
+    'logo': '',
+    'phone': ''
+  },
+  stations = []
+}`
 
 Pretty nifty huh.
 
