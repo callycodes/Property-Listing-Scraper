@@ -49,42 +49,48 @@ def find_between(s, start, end):
   return (s.split(start))[1].split(end)[0]
 
 def scrapeProperty(url):
-  page = requests.get(url)
+  try:
+    page = requests.get(url)
 
-  json_scraped = find_between(page.text, 'window.PAGE_MODEL = ', '</script>')
+    json_scraped = find_between(page.text, 'window.PAGE_MODEL = ', '</script>')
 
-  property_obj = json.loads(json_scraped)['propertyData']
+    property_obj = json.loads(json_scraped)['propertyData']
 
-  property_cleaned = Property(
-    id = property_obj['id'],
-    info = {
-      'bedrooms': property_obj['bedrooms'],
-      'bathrooms': property_obj['bathrooms']
-    },
-    prices = { 
-      'monthly': property_obj['prices']['primaryPrice'],
-      'weekly': property_obj['prices']['secondaryPrice']
-    },
-    location = {
-      'display': property_obj['address']['displayAddress'],
-      'latitude': property_obj['location']['latitude'],
-      'longitude': property_obj['location']['longitude']
-    },
-    letting = {
-      'available': property_obj['lettings']['letAvailableDate'],
-      'deposit': property_obj['lettings']['deposit'],
-      'type': property_obj['lettings']['letType'],
-      'furnished': property_obj['lettings']['furnishType']
-    },
-    features = property_obj['keyFeatures'],
-    images = property_obj['images'],
-    realtor = {
-      'name': property_obj['customer']['branchDisplayName'],
-      'address': property_obj['customer']['displayAddress'],
-      'logo': property_obj['customer']['logoPath'],
-      'phone': property_obj['contactInfo']['telephoneNumbers']['localNumber']
-    },
-    stations = property_obj['nearestStations']
-  )
+    property_cleaned = Property(
+      id = property_obj['id'],
+      info = {
+        'bedrooms': property_obj['bedrooms'],
+        'bathrooms': property_obj['bathrooms']
+      },
+      prices = { 
+        'monthly': property_obj['prices']['primaryPrice'],
+        'weekly': property_obj['prices']['secondaryPrice']
+      },
+      location = {
+        'display': property_obj['address']['displayAddress'],
+        'latitude': property_obj['location']['latitude'],
+        'longitude': property_obj['location']['longitude']
+      },
+      letting = {
+        'available': property_obj['lettings']['letAvailableDate'],
+        'deposit': property_obj['lettings']['deposit'],
+        'type': property_obj['lettings']['letType'],
+        'furnished': property_obj['lettings']['furnishType']
+      },
+      features = property_obj['keyFeatures'],
+      images = property_obj['images'],
+      realtor = {
+        'name': property_obj['customer']['branchDisplayName'],
+        'address': property_obj['customer']['displayAddress'],
+        'logo': property_obj['customer']['logoPath'],
+        'phone': property_obj['contactInfo']['telephoneNumbers']['localNumber']
+      },
+      stations = property_obj['nearestStations']
+    )
 
-  return json.dumps(property_cleaned.__dict__, indent=4, sort_keys=True, ensure_ascii=False)
+    return json.dumps(property_cleaned.__dict__, indent=4, sort_keys=True, ensure_ascii=False)
+  except:
+    error_result = {
+      'error': 'Something went wrong'
+    }
+    return json.dumps(error_result, indent=4, sort_keys=True, ensure_ascii=False)
